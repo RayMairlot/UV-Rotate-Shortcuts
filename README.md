@@ -1,4 +1,7 @@
 UV-Rotate-Shortcuts
 ===================
 
-Rotate UV selection by 90 degrees clock-wise or counter-clockwise
+A simple addon to rotate uv selection clockwise or counter-clockwise with shortcuts.
+
+Shift+R to rotate UV selection to the right.
+<p>Ctrl+Shift+R to rotate UV selection to the left.
