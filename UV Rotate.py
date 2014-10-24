@@ -26,6 +26,20 @@ bl_info = {
     "category": "UV"}
     
 import bpy    
+      
+      
+#class RotateUVPreferences(bpy.types.AddonPreferences):
+#    bl_idname = __name__  
+#    
+#    uv_rotation_angle = bpy.props.IntProperty(name="UV Rotation Angle",default=90,description="Angle by which to rotate the selectged UVs by")
+#
+#    def draw(self, context):
+#        layout = self.layout
+#        row = layout.row()
+#        row.split()
+#        row.prop(self, "uv_rotation_angle")
+#        row.label("test")
+   
         
 
 class RotateUVLeftOperator(bpy.types.Operator):
@@ -61,6 +75,7 @@ def main(context, direction=""):        #Same function used for both operators, 
 def register():
     bpy.utils.register_class(RotateUVLeftOperator)
     bpy.utils.register_class(RotateUVRightOperator)
+    #bpy.utils.register_class(RotateUVPreferences)       
     
     kc = bpy.context.window_manager.keyconfigs.addon
 
@@ -72,8 +87,9 @@ def register():
 
 
 def unregister():
-    bpy.utils.unregister_class(NextTextBlockOperator)
+    bpy.utils.unregister_class(RotateUVLeftOperator)
     bpy.utils.unregister_class(RotateUVRightOperator)
+    #bpy.utils.unregister_class(RotateUVPreferences)    
     
     kc = bpy.context.window_manager.keyconfigs.addon
     kc.keymaps.remove(kc.keymaps['UV'])    
