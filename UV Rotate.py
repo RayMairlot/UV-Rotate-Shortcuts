@@ -28,11 +28,12 @@ bl_info = {
 import bpy   
 from math import radians 
       
-      
+
+#User preferences appear under addon when enabled      
 class RotateUVPreferences(bpy.types.AddonPreferences):
     bl_idname = __name__  
     
-    uv_rotation_angle = bpy.props.IntProperty(name="UV Rotation Angle",default=90,description="Angle by which to rotate the selectged UVs by")
+    uv_rotation_angle = bpy.props.IntProperty(name="UV Rotation Angle",default=90,description="Angle by which to rotate the selected UVs by")
 
     def draw(self, context):
         layout = self.layout
@@ -64,12 +65,12 @@ class RotateUVRightOperator(bpy.types.Operator):
         return {'FINISHED'}    
 
 
-def main(context, direction=""):        #Same function used for both operators, pass in direction
+#Same function used for both operators, pass in direction
+def main(context, direction=""):
     
+    #Get user preference value and convert to radians
     angle = radians(bpy.context.user_preferences.addons['UV Rotate'].preferences.uv_rotation_angle)
-    
-    #1.5708
-    
+        
     if direction=="Left":
         bpy.ops.transform.rotate(value=-angle)
     else:
