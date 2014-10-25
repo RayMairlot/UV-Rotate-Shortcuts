@@ -96,7 +96,7 @@ def unregister():
     bpy.utils.unregister_class(RotateUVPreferences)    
     
     kc = bpy.context.window_manager.keyconfigs.addon
-    kc.keymaps.remove(kc.keymaps['UV'])    
+    kc.keymaps.remove(kc.keymaps['Image'])    
 
 
 if __name__ == "__main__":
