@@ -27,7 +27,11 @@ bl_info = {
     
 import bpy   
 from math import radians 
-      
+
+operators = [
+            ["Rotate UV Selection Left", "Ctrl+Shift+R", "uv.rotate_selection_left"],
+            ["Rotate UV Selection Right", "Shift+R", "uv.rotate_selection_right"]
+            ]      
 
 #User preferences appear under addon when enabled      
 class RotateUVPreferences(bpy.types.AddonPreferences):
@@ -41,6 +45,25 @@ class RotateUVPreferences(bpy.types.AddonPreferences):
         row.prop(self, "uv_rotation_angle")
         row.label("")
         row.label("")
+                
+        row = layout.row()
+        row.label("Shortcuts:")
+
+        for operator in operators:
+            row = layout.row()
+            
+            col = row.column()
+            col.label(operator[0]+":")
+                        
+            col = row.column()
+            col.label("        "+operator[1])
+            col.enabled = False
+            
+            col = row.column()
+            col.operator("wm.edit_shortcut", text="Edit Shortcut").shortcut = operator[2]
+            
+            col = row.column()
+            col.label("")                    
    
 
 class RotateUVLeftOperator(bpy.types.Operator):
@@ -63,6 +86,18 @@ class RotateUVRightOperator(bpy.types.Operator):
     def execute(self, context):
         main(context, "Right")
         return {'FINISHED'}    
+    
+    
+class EditShortcutOperator(bpy.types.Operator):
+    """ Edit shortcuts for this addon """
+    bl_idname = "wm.edit_shortcut"
+    bl_label = "View and edit shortcuts for this addon"
+
+    shortcut = bpy.props.StringProperty()
+
+    def execute(self, context):
+        editShortcuts(self,context)
+        return {'FINISHED'}    
 
 
 #Same function used for both operators, pass in direction
@@ -77,9 +112,16 @@ def main(context, direction=""):
         bpy.ops.transform.rotate(value=angle)        
 
 
+def editShortcuts(self,context):
+    
+    bpy.context.user_preferences.active_section = 'INPUT'
+    context.area.spaces[0].filter_text = self.shortcut#"Rotate UV Selection"
+
+
 def register():
     bpy.utils.register_class(RotateUVLeftOperator)
     bpy.utils.register_class(RotateUVRightOperator)
+    bpy.utils.register_class(EditShortcutOperator)    
     bpy.utils.register_class(RotateUVPreferences)       
     
     kc = bpy.context.window_manager.keyconfigs.addon
@@ -94,6 +136,7 @@ def register():
 def unregister():
     bpy.utils.unregister_class(RotateUVLeftOperator)
     bpy.utils.unregister_class(RotateUVRightOperator)
+    bpy.utils.unregister_class(EditShortcutOperator)        
     bpy.utils.unregister_class(RotateUVPreferences)    
     
     kc = bpy.context.window_manager.keyconfigs.addon
