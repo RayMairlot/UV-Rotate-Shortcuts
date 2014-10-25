@@ -25,22 +25,22 @@ bl_info = {
     "location": "UV/Image Editor > Shift+R or Ctrl+Shift+R",
     "category": "UV"}
     
-import bpy    
+import bpy   
+from math import radians 
       
       
-#class RotateUVPreferences(bpy.types.AddonPreferences):
-#    bl_idname = __name__  
-#    
-#    uv_rotation_angle = bpy.props.IntProperty(name="UV Rotation Angle",default=90,description="Angle by which to rotate the selectged UVs by")
-#
-#    def draw(self, context):
-#        layout = self.layout
-#        row = layout.row()
-#        row.split()
-#        row.prop(self, "uv_rotation_angle")
-#        row.label("test")
+class RotateUVPreferences(bpy.types.AddonPreferences):
+    bl_idname = __name__  
+    
+    uv_rotation_angle = bpy.props.IntProperty(name="UV Rotation Angle",default=90,description="Angle by which to rotate the selectged UVs by")
+
+    def draw(self, context):
+        layout = self.layout
+        row = layout.row()
+        row.prop(self, "uv_rotation_angle")
+        row.label("")
+        row.label("")
    
-        
 
 class RotateUVLeftOperator(bpy.types.Operator):
     """ Rotate UV selection to the left """
@@ -66,16 +66,20 @@ class RotateUVRightOperator(bpy.types.Operator):
 
 def main(context, direction=""):        #Same function used for both operators, pass in direction
     
+    angle = radians(bpy.context.user_preferences.addons['UV Rotate'].preferences.uv_rotation_angle)
+    
+    #1.5708
+    
     if direction=="Left":
-        bpy.ops.transform.rotate(value=-1.5708)
+        bpy.ops.transform.rotate(value=-angle)
     else:
-        bpy.ops.transform.rotate(value=1.5708)        
+        bpy.ops.transform.rotate(value=angle)        
 
 
 def register():
     bpy.utils.register_class(RotateUVLeftOperator)
     bpy.utils.register_class(RotateUVRightOperator)
-    #bpy.utils.register_class(RotateUVPreferences)       
+    bpy.utils.register_class(RotateUVPreferences)       
     
     kc = bpy.context.window_manager.keyconfigs.addon
 
@@ -89,7 +93,7 @@ def register():
 def unregister():
     bpy.utils.unregister_class(RotateUVLeftOperator)
     bpy.utils.unregister_class(RotateUVRightOperator)
-    #bpy.utils.unregister_class(RotateUVPreferences)    
+    bpy.utils.unregister_class(RotateUVPreferences)    
     
     kc = bpy.context.window_manager.keyconfigs.addon
     kc.keymaps.remove(kc.keymaps['UV'])    
