@@ -28,9 +28,11 @@ bl_info = {
 import bpy   
 from math import radians 
 
+modifierKeys = ["any", "shift", "ctrl", "alt", "oskey"] # "type", "key_modifier"]
+
 operators = [
-            ["Rotate UV Selection Left", "Ctrl+Shift+R", "uv.rotate_selection_left"],
-            ["Rotate UV Selection Right", "Shift+R", "uv.rotate_selection_right"]
+            ["Rotate UV Selection Left", "uv.rotate_selection_left"],
+            ["Rotate UV Selection Right", "uv.rotate_selection_right"]
             ]      
 
 #User preferences appear under addon when enabled      
@@ -50,21 +52,12 @@ class RotateUVPreferences(bpy.types.AddonPreferences):
         row.label("Shortcuts:")
 
         for operator in operators:
+            
             row = layout.row()
+            row.label(operator[0]+":")
             
-            col = row.column()
-            col.label(operator[0]+":")
-                        
-            col = row.column()
-            col.label("        "+operator[1])
-            col.enabled = False
+            row.operator("wm.edit_shortcut", text="Edit Shortcut").shortcut = operator[1]
             
-            col = row.column()
-            col.operator("wm.edit_shortcut", text="Edit Shortcut").shortcut = operator[2]
-            
-            col = row.column()
-            col.label("")                    
-   
 
 class RotateUVLeftOperator(bpy.types.Operator):
     """ Rotate UV selection to the left """
@@ -97,7 +90,7 @@ class EditShortcutOperator(bpy.types.Operator):
 
     def execute(self, context):
         editShortcuts(self,context)
-        return {'FINISHED'}    
+        return {'FINISHED'} 
 
 
 #Same function used for both operators, pass in direction
@@ -116,14 +109,16 @@ def editShortcuts(self,context):
     
     bpy.context.user_preferences.active_section = 'INPUT'
     context.area.spaces[0].filter_text = self.shortcut#"Rotate UV Selection"
-
+    
+    bpy.context.window_manager.keyconfigs.addon.keymaps['Image'].keymap_items[self.shortcut].show_expanded = True
+    
 
 def register():
     bpy.utils.register_class(RotateUVLeftOperator)
     bpy.utils.register_class(RotateUVRightOperator)
     bpy.utils.register_class(EditShortcutOperator)    
-    bpy.utils.register_class(RotateUVPreferences)       
-    
+    bpy.utils.register_class(RotateUVPreferences)   
+ 
     kc = bpy.context.window_manager.keyconfigs.addon
 
     km = kc.keymaps.new(name='Image', space_type='IMAGE_EDITOR')
