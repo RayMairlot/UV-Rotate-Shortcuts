@@ -63,7 +63,7 @@ class RotateUVLeftOperator(bpy.types.Operator):
     """ Rotate UV selection to the left """
     bl_idname = "uv.rotate_selection_left"
     bl_label = "Rotate UV Selection Left"
-
+    bl_options = {"UNDO"}
 
     def execute(self, context):
         main(context,"Left")
@@ -74,7 +74,7 @@ class RotateUVRightOperator(bpy.types.Operator):
     """ Rotate UV selection to the right """
     bl_idname = "uv.rotate_selection_right"
     bl_label = "Rotate UV Selection Right"
-
+    bl_options = {"UNDO"}    
 
     def execute(self, context):
         main(context, "Right")
