@@ -57,7 +57,7 @@ class RotateUVPreferences(bpy.types.AddonPreferences):
             row.label(operator[0]+":")
             
             row.operator("wm.edit_shortcut", text="Edit Shortcut").shortcut = operator[1]
-            
+
 
 class RotateUVLeftOperator(bpy.types.Operator):
     """ Rotate UV selection to the left """
@@ -113,31 +113,35 @@ def editShortcuts(self,context):
     bpy.context.window_manager.keyconfigs.addon.keymaps['Image'].keymap_items[self.shortcut].show_expanded = True
     
 
+keymaps = []
+
 def register():
 
     bpy.utils.register_module(__name__)
 
-    kc = bpy.context.window_manager.keyconfigs.addon
-
-    km = kc.keymaps.new(name='Image', space_type='IMAGE_EDITOR')
-    km.keymap_items.new("uv.rotate_selection_left", 'R', 'PRESS', ctrl=True, shift=True)
+    wm = bpy.context.window_manager
+    kc = wm.keyconfigs.addon
     
-    km = kc.keymaps.new(name='Image', space_type='IMAGE_EDITOR')
-    km.keymap_items.new("uv.rotate_selection_right", 'R', 'PRESS', shift=True)
+    if kc:
 
+        km = wm.keyconfigs.addon.keymaps.new(name='Image', space_type='IMAGE_EDITOR')
+        kmi = km.keymap_items.new("uv.rotate_selection_left", 'R', 'PRESS', ctrl=True, shift=True)
+        keymaps.append((km, kmi))
+
+        km = wm.keyconfigs.addon.keymaps.new(name='Image', space_type='IMAGE_EDITOR')
+        kmi = km.keymap_items.new("uv.rotate_selection_right", 'R', 'PRESS', shift=True)
+        keymaps.append((km, kmi))
 
 def unregister():
 
-    bpy.utils.unregister_module(__name__)
+    print("keymaps: ", keymaps)
 
-    kc = bpy.context.window_manager.keyconfigs.addon
-    kc.keymaps.remove(kc.keymaps['Image'])    
+    for km, kmi in keymaps:
+        km.keymap_items.remove(kmi)
+    keymaps.clear()
+
+    bpy.utils.unregister_module(__name__)
 
 
 if __name__ == "__main__":
     register()
-
-
-
-
-
