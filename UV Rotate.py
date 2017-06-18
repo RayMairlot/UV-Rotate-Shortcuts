@@ -134,8 +134,6 @@ def register():
 
 def unregister():
 
-    print("keymaps: ", keymaps)
-
     for km, kmi in keymaps:
         km.keymap_items.remove(kmi)
     keymaps.clear()
