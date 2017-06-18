@@ -20,7 +20,7 @@ bl_info = {
     "name": "Rotate UV Selection",
     "description": "Rotate UV selection left or right by 90 degrees",
     "author": "Ray Mairlot",
-    "version": (1, 0),
+    "version": (1, 1, 2),
     "blender": (2, 72, 0),
     "location": "UV/Image Editor > Shift+R or Ctrl+Shift+R",
     "category": "UV"}
