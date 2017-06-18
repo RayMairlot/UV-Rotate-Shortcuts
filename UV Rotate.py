@@ -114,11 +114,9 @@ def editShortcuts(self,context):
     
 
 def register():
-    bpy.utils.register_class(RotateUVLeftOperator)
-    bpy.utils.register_class(RotateUVRightOperator)
-    bpy.utils.register_class(EditShortcutOperator)    
-    bpy.utils.register_class(RotateUVPreferences)   
- 
+
+    bpy.utils.register_module(__name__)
+
     kc = bpy.context.window_manager.keyconfigs.addon
 
     km = kc.keymaps.new(name='Image', space_type='IMAGE_EDITOR')
@@ -129,11 +127,9 @@ def register():
 
 
 def unregister():
-    bpy.utils.unregister_class(RotateUVLeftOperator)
-    bpy.utils.unregister_class(RotateUVRightOperator)
-    bpy.utils.unregister_class(EditShortcutOperator)        
-    bpy.utils.unregister_class(RotateUVPreferences)    
-    
+
+    bpy.utils.unregister_module(__name__)
+
     kc = bpy.context.window_manager.keyconfigs.addon
     kc.keymaps.remove(kc.keymaps['Image'])    
 
